@@ -6,7 +6,13 @@ const { authenticate, JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
 
-// POST /auth/login
+function issueToken(user) {
+  const payload = { id: user.id, name: user.name, email: user.email, role: user.role };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
+  return { token, user: payload };
+}
+
+// POST /auth/login — sign in with existing credentials
 router.post('/login', async (req, res, next) => {
   try {
     const { email, password } = req.body || {};
@@ -22,9 +28,7 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ error: 'Incorrect email or password.' });
     }
 
-    const payload = { id: user.id, name: user.name, email: user.email, role: user.role };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
-    res.json({ token, user: payload });
+    res.json(issueToken(user));
   } catch (err) {
     next(err);
   }

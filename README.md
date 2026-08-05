@@ -1,34 +1,65 @@
 # Jadeja University — Smart Portal
 
-A fully restructured three-tier architecture:
+Three-tier university LMS:
 
-| Layer       | Technology                                   | Directory    |
-|-------------|----------------------------------------------|--------------|
-| **Frontend**| React 18 + Vite                              | `frontend/`  |
-| **Backend** | Node.js + Express + JWT Auth                 | `backend/`   |
-| **Database**| SQLite via **Prisma ORM**                    | `db/`        |
+| Layer        | Technology                          | Directory   |
+|--------------|-------------------------------------|-------------|
+| **Frontend** | React 19 + Vite + React Router      | `frontend/` |
+| **Backend**  | Node.js + Express + JWT Auth        | `backend/`  |
+| **Database** | PostgreSQL (Docker) via Prisma ORM  | —           |
 
 ---
 
 ## Quick Start
 
-### 1. Setup & seed the database
+### 1. Start PostgreSQL in Docker
+
+If the container does not exist yet:
+
+```bash
+docker run --name jadeja-postgres \
+  -e POSTGRES_USER=meetesh \
+  -e POSTGRES_PASSWORD=1234 \
+  -e POSTGRES_DB=jadeja-project \
+  -p 5432:5432 \
+  -d postgres:16
+```
+
+If it already exists:
+
+```bash
+docker start jadeja-postgres
+```
+
+`backend/.env` should match:
+
+```env
+DATABASE_URL="postgresql://meetesh:1234@localhost:5432/jadeja-project"
+JWT_SECRET="jadeja-super-secret-change-me"
+PORT=4000
+FRONTEND_URL="http://localhost:5173"
+```
+
+### 2. Setup & seed the database
 
 ```bash
 cd backend
 npm install
 npx prisma migrate deploy
-node src/utils/seed.js
+npm run db:seed
 ```
 
-### 2. Start the backend (port 4000)
+### 3. Start the backend (port 4000)
 
 ```bash
 cd backend
 npm run dev
+# or: npm start
 ```
 
-### 3. Start the frontend (port 5173)
+On boot the API ensures the static admin account exists.
+
+### 4. Start the frontend (port 5173)
 
 ```bash
 cd frontend
@@ -36,28 +67,60 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**
+Open **http://localhost:5173** — unauthenticated users are redirected to **/signin**.
+
+| Path       | Purpose                          |
+|------------|----------------------------------|
+| `/signin`  | Sign in with an existing account |
+| `/login`   | Redirects to `/signin`           |
+| `/signup`  | Redirects to `/signin` (disabled)|
 
 ---
 
-## Demo Accounts
+## Auth & roles
 
-| Role    | Email                       | Password    |
-|---------|-----------------------------|-------------|
-| Student | student1@university.edu     | student123  |
-| Faculty | faculty1@university.edu     | faculty123  |
-| Admin   | admin@university.edu        | admin123    |
+### Static admin
+
+| Email              | Password    |
+|--------------------|-------------|
+| `admin@jadeja.edu` | `Admin@123` |
+
+- Defined in `backend/src/config/admin.js`
+- Upserted automatically on API start
+- **Only admin** can create **students** and **teachers (faculty)** from the Users page
+- There is **no public signup**
+- Admin cannot create additional admin accounts via the API
+
+### Sample seed accounts
+
+After `npm run db:seed`:
+
+| Role     | Email                       | Password     |
+|----------|-----------------------------|--------------|
+| Faculty  | `faculty1@university.edu`   | `faculty123` |
+| Faculty  | `faculty2@university.edu`   | `faculty123` |
+| Student  | `student1@university.edu`   | `student123` |
+| Student  | `student2@university.edu`   | `student123` |
+| Student  | `student3@university.edu`   | `student123` |
+
+Seed also creates sample courses, enrollments, assignments, attendance, and results.
+
+### How faculty / student LMS connects
+
+- A **faculty** user only sees courses where `course.facultyId` = their user id
+- A **student** only appears on a course roster after an **enrollment** row exists
+- Creating a user alone does **not** enroll them or assign courses — use Courses enroll (students) or assign/create courses for faculty
 
 ---
 
 ## Project Structure
 
 ```
-university-portal/
-├── frontend/                 # React + Vite
+jadeja-university-main/
+├── frontend/
 │   └── src/
-│       ├── api.js            # Fetch utility (JWT injection)
-│       ├── App.jsx           # Root component + routing
+│       ├── api.js
+│       ├── App.jsx                 # Router + auth gate
 │       ├── context/
 │       │   ├── AuthContext.jsx
 │       │   └── ToastContext.jsx
@@ -69,37 +132,45 @@ university-portal/
 │           ├── CoursesPage.jsx
 │           ├── AttendancePage.jsx
 │           ├── AssignmentsPage.jsx
-│           └── ResultsPage.jsx
+│           ├── ResultsPage.jsx
+│           └── UsersPage.jsx       # Admin-only
 │
-├── backend/                  # Node.js + Express
+├── backend/
 │   ├── prisma/
-│   │   └── schema.prisma     # Database models
+│   │   └── schema.prisma
 │   └── src/
-│       ├── index.js          # Express entry point
-│       ├── middleware/auth.js # JWT verify + role guard
+│       ├── index.js
+│       ├── config/
+│       │   └── admin.js            # Static admin credentials
+│       ├── middleware/
+│       │   └── auth.js
 │       ├── routes/
 │       │   ├── auth.js
 │       │   ├── courses.js
 │       │   ├── attendance.js
 │       │   ├── assignments.js
-│       │   └── results.js
+│       │   ├── results.js
+│       │   └── users.js            # Admin-only user management
 │       └── utils/
-│           ├── prisma.js     # Prisma client singleton
-│           └── seed.js       # Demo data seeder
+│           ├── prisma.js
+│           ├── ensureAdmin.js
+│           └── seed.js
 │
-└── db/
-    └── jadeja.db             # SQLite database (auto-created)
+└── (PostgreSQL in Docker — see Quick Start §1)
 ```
 
 ---
 
 ## API Reference
 
-All endpoints under `/api/v1`. Except `/auth/login`, all require `Authorization: Bearer <token>`.
+All endpoints under `/api/v1`. Except `/auth/login` and `/health`, all require `Authorization: Bearer <token>`.
 
 ```
 POST   /auth/login
 GET    /auth/me
+
+GET    /users                            (admin)
+POST   /users                            (admin — student|faculty only)
 
 GET    /courses
 POST   /courses                          (faculty/admin)
@@ -117,4 +188,6 @@ POST   /assignments/submissions/:id/grade (faculty/admin)
 GET    /results/course/:courseId         (faculty/admin)
 POST   /results/course/:courseId         (faculty/admin)
 GET    /results/me                       (student)
+
+GET    /health
 ```

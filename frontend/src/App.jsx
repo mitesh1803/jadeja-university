@@ -1,19 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
-import { Sidebar, NAV_ITEMS } from './components/Sidebar';
-import LoginPage      from './pages/LoginPage';
-import CoursesPage    from './pages/CoursesPage';
-import AttendancePage from './pages/AttendancePage';
+import { Sidebar } from './components/Sidebar';
+import LoginPage       from './pages/LoginPage';
+import CoursesPage     from './pages/CoursesPage';
+import AttendancePage  from './pages/AttendancePage';
 import AssignmentsPage from './pages/AssignmentsPage';
-import ResultsPage    from './pages/ResultsPage';
-import UsersPage      from './pages/UsersPage';
-import { apiFetch }   from './api';
+import ResultsPage     from './pages/ResultsPage';
+import UsersPage       from './pages/UsersPage';
+import { apiFetch }    from './api';
 
-function AppShell() {
+function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) return <LoginPage />;
-  return <AuthenticatedApp />;
+  if (!isAuthenticated) return <Navigate to="/signin" replace />;
+  return children;
 }
 
 function AuthenticatedApp() {
@@ -32,8 +33,6 @@ function AuthenticatedApp() {
 
   useEffect(() => { loadCourses(); }, [loadCourses]);
 
-  const meta = NAV_ITEMS.find((n) => n.id === view);
-
   return (
     <div className="app-layout">
       <Sidebar activeView={view} onNavigate={setView} />
@@ -42,8 +41,7 @@ function AuthenticatedApp() {
         {view === 'courses' && (
           <CoursesPage
             key="courses"
-            onNavigateToCourse={(courseId) => {
-              // Re-fetch and navigate to assignments pre-selecting this course
+            onNavigateToCourse={() => {
               loadCourses();
               setView('assignments');
             }}
@@ -58,7 +56,7 @@ function AuthenticatedApp() {
         {view === 'results' && (
           <ResultsPage key="results" courses={courses} />
         )}
-        {view === 'users' && (
+        {view === 'users' && user?.role === 'admin' && (
           <UsersPage key="users" />
         )}
       </main>
@@ -66,12 +64,32 @@ function AuthenticatedApp() {
   );
 }
 
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/signin" element={<LoginPage />} />
+      <Route path="/login" element={<Navigate to="/signin" replace />} />
+      <Route path="/signup" element={<Navigate to="/signin" replace />} />
+      <Route
+        path="/*"
+        element={
+          <ProtectedRoute>
+            <AuthenticatedApp />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
+}
+
 export default function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <AppShell />
-      </ToastProvider>
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <ToastProvider>
+          <AppRoutes />
+        </ToastProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }

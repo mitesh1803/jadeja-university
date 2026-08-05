@@ -570,34 +570,6 @@ td { padding: 12px 14px; color: var(--text); vertical-align: middle; }
   text-align: center;
   min-height: 18px;
 }
-.demo-accounts { margin-top: 24px; }
-.demo-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  text-align: center;
-  margin-bottom: 12px;
-}
-.demo-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.demo-chip {
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-soft);
-  cursor: pointer;
-  transition: all var(--transition);
-}
-.demo-chip:hover {
-  border-color: var(--accent);
-  color: var(--accent-2);
-  background: var(--accent-glow);
-}
-
 /* ── Course card ── */
 .course-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 .course-card {

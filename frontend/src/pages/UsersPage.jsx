@@ -83,7 +83,7 @@ export default function UsersPage() {
               onClick={() => setShowModal(true)}
               id="new-user-btn"
             >
-              + Add User
+              + Add Student / Teacher
             </button>
           </div>
         </div>
@@ -93,7 +93,7 @@ export default function UsersPage() {
         {loading ? (
           <Spinner />
         ) : users.length === 0 ? (
-          <EmptyState icon="👥" title="No users found" message="No users are registered in the system." />
+          <EmptyState icon="👥" title="No users found" message="Add a student or teacher to get started." />
         ) : (
           <div className="card">
             <div className="table-wrap">
@@ -132,7 +132,7 @@ export default function UsersPage() {
       </div>
 
       {showModal && (
-        <Modal title="Add New User" onClose={() => setShowModal(false)}>
+        <Modal title="Add Student or Teacher" onClose={() => setShowModal(false)}>
           <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <FormField label="Full Name">
               <input
@@ -140,6 +140,7 @@ export default function UsersPage() {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="e.g. John Doe"
+                required
               />
             </FormField>
             <FormField label="Email">
@@ -149,6 +150,7 @@ export default function UsersPage() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="e.g. john@university.edu"
+                required
               />
             </FormField>
             <FormField label="Password">
@@ -157,7 +159,9 @@ export default function UsersPage() {
                 type="password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                placeholder="Initial password"
+                placeholder="At least 6 characters"
+                minLength={6}
+                required
               />
             </FormField>
             <FormField label="Role">
@@ -167,12 +171,11 @@ export default function UsersPage() {
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
               >
                 <option value="student">Student</option>
-                <option value="faculty">Faculty</option>
-                <option value="admin">Admin</option>
+                <option value="faculty">Teacher (Faculty)</option>
               </select>
             </FormField>
             <button type="submit" className="btn btn-primary" disabled={saving} id="f-submit">
-              {saving ? 'Creating…' : 'Create User'}
+              {saving ? 'Creating…' : 'Create Account'}
             </button>
           </form>
         </Modal>

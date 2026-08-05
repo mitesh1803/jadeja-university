@@ -1,17 +1,11 @@
 {
   "name": "smart-university-portal",
   "version": "1.0.0",
-  "description": "Smart University Portal - demo-critical-path build (auth, courses, attendance, assignments, results)",
-  "main": "server/index.js",
-  "type": "commonjs",
+  "description": "Smart University Portal - three-tier build (frontend/, backend/)",
+  "private": true,
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "node --watch server/index.js"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2"
+    "setup": "npm install --prefix backend && npm install --prefix frontend && npm run --prefix backend setup",
+    "dev:backend": "npm run --prefix backend dev",
+    "dev:frontend": "npm run --prefix frontend dev"
   }
 }
