@@ -1,0 +1,167 @@
+{
+  "users": [
+    {
+      "id": "u_admin",
+      "name": "Priya Nair",
+      "email": "admin@university.edu",
+      "role": "admin",
+      "passwordHash": "$2a$08$1pXauJzjZkbzvqbewHGrVeWSfiJIKPI.584o.B36mAlMLi3AGZwBu"
+    },
+    {
+      "id": "u_faculty1",
+      "name": "Dr. Elena Cross",
+      "email": "faculty1@university.edu",
+      "role": "faculty",
+      "passwordHash": "$2a$08$F2ZSKJC8gEzhRMTddTV0OOtG2rg4YTWOIklLOlqduB2mGFldvp8qa"
+    },
+    {
+      "id": "u_faculty2",
+      "name": "Dr. Raj Malhotra",
+      "email": "faculty2@university.edu",
+      "role": "faculty",
+      "passwordHash": "$2a$08$KD.wDtLn3OuJWP1x3PuCdeO2/lRLbVICUMa/2pM12Zw14XkpEhzqa"
+    },
+    {
+      "id": "u_student1",
+      "name": "Amara Okafor",
+      "email": "student1@university.edu",
+      "role": "student",
+      "passwordHash": "$2a$08$JCltT77rBezwYoQKiwLMpO9qNUZLqz0seNOAnHiKBZLURcS34AnVu"
+    },
+    {
+      "id": "u_student2",
+      "name": "Kenji Watanabe",
+      "email": "student2@university.edu",
+      "role": "student",
+      "passwordHash": "$2a$08$F2eq9yqVg.XDuFMIj6xLCeUzYrgWC3Vp2YNp1KVpeoMXRZYZ9EwG."
+    },
+    {
+      "id": "u_student3",
+      "name": "Sofia Reyes",
+      "email": "student3@university.edu",
+      "role": "student",
+      "passwordHash": "$2a$08$KRyNqSGeMWGgz5GyZW2loemgAgsztgQPM5RzlZaSAe9hJZfbKlW/m"
+    }
+  ],
+  "courses": [
+    {
+      "id": "c_cs301",
+      "code": "CS301",
+      "title": "Distributed Systems",
+      "facultyId": "u_faculty1",
+      "description": "Consensus, replication, and fault tolerance in large-scale systems."
+    },
+    {
+      "id": "c_ma210",
+      "code": "MA210",
+      "title": "Linear Algebra",
+      "facultyId": "u_faculty2",
+      "description": "Vector spaces, matrices, eigenvalues, and applications."
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "e_msfge0x96c5nry",
+      "courseId": "c_cs301",
+      "studentId": "u_student1"
+    },
+    {
+      "id": "e_msfge0x9uda9fn",
+      "courseId": "c_cs301",
+      "studentId": "u_student2"
+    },
+    {
+      "id": "e_msfge0x9ot3aij",
+      "courseId": "c_ma210",
+      "studentId": "u_student1"
+    },
+    {
+      "id": "e_msfge0x9klw81g",
+      "courseId": "c_ma210",
+      "studentId": "u_student3"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "att_msfge0x9n0oavr",
+      "courseId": "c_cs301",
+      "studentId": "u_student1",
+      "date": "2026-08-01",
+      "status": "present"
+    },
+    {
+      "id": "att_msfge0x9dg5jbs",
+      "courseId": "c_cs301",
+      "studentId": "u_student2",
+      "date": "2026-08-01",
+      "status": "absent"
+    },
+    {
+      "id": "att_msfge0x9fthryd",
+      "courseId": "c_cs301",
+      "studentId": "u_student1",
+      "date": "2026-08-03",
+      "status": "present"
+    },
+    {
+      "id": "att_msfge0x93f5w2p",
+      "courseId": "c_cs301",
+      "studentId": "u_student2",
+      "date": "2026-08-03",
+      "status": "present"
+    }
+  ],
+  "assignments": [
+    {
+      "id": "a_cs301_1",
+      "courseId": "c_cs301",
+      "title": "Raft Consensus Report",
+      "description": "Summarize leader election and log replication in Raft.",
+      "dueDate": "2026-08-20"
+    },
+    {
+      "id": "a_ma210_1",
+      "courseId": "c_ma210",
+      "title": "Eigenvalue Problem Set",
+      "description": "Problems 1-12 from Chapter 6.",
+      "dueDate": "2026-08-18"
+    }
+  ],
+  "submissions": [
+    {
+      "id": "sub_msfge0x9v4gbsq",
+      "assignmentId": "a_cs301_1",
+      "studentId": "u_student1",
+      "submittedAt": "2026-08-15T10:00:00Z",
+      "content": "Draft submitted.",
+      "grade": 88,
+      "feedback": "Solid analysis of leader election; expand on log compaction."
+    }
+  ],
+  "results": [
+    {
+      "id": "res_msfge0x9eyvu3r",
+      "courseId": "c_cs301",
+      "studentId": "u_student1",
+      "marks": 91,
+      "grade": "A"
+    },
+    {
+      "id": "res_msfge0x9bnn7mr",
+      "courseId": "c_ma210",
+      "studentId": "u_student1",
+      "marks": 78,
+      "grade": "B+"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "n_msfge0x9o9xirk",
+      "userId": "u_student1",
+      "message": "New assignment posted in CS301: Raft Consensus Report.",
+      "createdAt": "2026-08-10T09:00:00Z",
+      "read": false
+    }
+  ],
+  "videos": []
+}

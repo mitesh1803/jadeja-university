@@ -1,0 +1,17 @@
+{
+  "name": "smart-university-portal",
+  "version": "1.0.0",
+  "description": "Smart University Portal - demo-critical-path build (auth, courses, attendance, assignments, results)",
+  "main": "server/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

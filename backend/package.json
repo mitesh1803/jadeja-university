@@ -1,0 +1,27 @@
+{
+  "name": "jadeja-backend",
+  "version": "1.0.0",
+  "description": "Jadeja University Portal — Node/Express API with Prisma ORM",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev --name init",
+    "db:seed": "node src/utils/seed.js",
+    "db:studio": "npx prisma studio",
+    "setup": "npm install && npx prisma generate && npx prisma migrate deploy && node src/utils/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.14.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.14.0"
+  }
+}
