@@ -40,6 +40,11 @@ pipeline {
                     bat 'npx prisma generate'
                 }
             }
+        } 
+        stage('Debug: Check DATABASE_URL') {
+            steps {
+                bat 'echo DATABASE_URL is: %DATABASE_URL%'
+            }
         }
 
         stage('Backend: DB migrate + seed') {
