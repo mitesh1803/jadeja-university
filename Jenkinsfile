@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DATABASE_URL = "file:../db/jadeja.db"
+        DATABASE_URL =  DATABASE_URL = "postgresql://meetesh:1234@localhost:5432/jadeja-project"
     }
 
     stages {
@@ -14,6 +14,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Code checkout'
+            }
+        }
+        
+        stage('Start Postgres (for testing)') {
+            steps {
+                //  db service starting, no backend/frontend  
+                bat 'docker-compose up -d db'
+                
+                bat 'timeout /t 10'
             }
         }
 
