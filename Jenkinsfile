@@ -22,7 +22,7 @@ pipeline {
                 //  db service starting, no backend/frontend  
                 bat 'docker-compose up -d db'
                 
-                bat 'timeout /t 10'
+                 bat 'ping -n 11 127.0.0.1 > nul'
             }
         }
 
