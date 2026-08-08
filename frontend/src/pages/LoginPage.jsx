@@ -1,21 +1,18 @@
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { apiFetch } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
-const DEMO_ACCOUNTS = [
-  { label: 'Student · Amara',     email: 'student1@university.edu', password: 'student123' },
-  { label: 'Faculty · Dr. Cross', email: 'faculty1@university.edu', password: 'faculty123' },
-  { label: 'Admin · Priya',       email: 'admin@university.edu',    password: 'admin123'  },
-];
-
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const showToast = useToast();
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
+
+  if (isAuthenticated) return <Navigate to="/" replace />;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -33,12 +30,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function fillDemo(acc) {
-    setEmail(acc.email);
-    setPassword(acc.password);
-    setError('');
   }
 
   return (
@@ -88,23 +79,6 @@ export default function LoginPage() {
             {loading ? 'Signing in…' : 'Sign in →'}
           </button>
         </form>
-
-        <div className="demo-accounts">
-          <p className="demo-label">Quick access — demo accounts</p>
-          <div className="demo-chips">
-            {DEMO_ACCOUNTS.map((acc) => (
-              <button
-                key={acc.email}
-                type="button"
-                className="demo-chip"
-                onClick={() => fillDemo(acc)}
-                id={`demo-${acc.email.split('@')[0]}`}
-              >
-                {acc.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );

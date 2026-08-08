@@ -10,6 +10,8 @@ const attendanceRoutes = require('./routes/attendance');
 const assignmentRoutes = require('./routes/assignments');
 const resultRoutes     = require('./routes/results');
 const userRoutes       = require('./routes/users');
+const { ensureStaticAdmin } = require('./utils/ensureAdmin');
+const { STATIC_ADMIN } = require('./config/admin');
 
 const app  = express();
 const PORT = process.env.PORT || 4000;
@@ -49,7 +51,19 @@ app.use((err, _req, res, _next) => {
 // ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
-app.listen(PORT, () => {
-  console.log(`\n🎓 Jadeja University API  →  http://localhost:${PORT}/api/v1`);
-  console.log(`   Health check           →  http://localhost:${PORT}/api/v1/health\n`);
-});
+async function start() {
+  try {
+    await ensureStaticAdmin();
+  } catch (err) {
+    console.error('Failed to ensure static admin:', err.message);
+    process.exit(1);
+  }
+
+  app.listen(PORT, () => {
+    console.log(`\n🎓 Jadeja University API  →  http://localhost:${PORT}/api/v1`);
+    console.log(`   Health check           →  http://localhost:${PORT}/api/v1/health`);
+    console.log(`   Admin login            →  ${STATIC_ADMIN.email} / ${STATIC_ADMIN.password}\n`);
+  });
+}
+
+start();

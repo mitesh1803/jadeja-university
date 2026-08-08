@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
@@ -10,6 +11,7 @@ const NAV_ITEMS = [
 
 export function Sidebar({ activeView, onNavigate }) {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const initials = user?.name
     ?.split(' ')
@@ -17,6 +19,11 @@ export function Sidebar({ activeView, onNavigate }) {
     .slice(0, 2)
     .join('')
     .toUpperCase() ?? '?';
+
+  function handleSignOut() {
+    logout();
+    navigate('/signin', { replace: true });
+  }
 
   return (
     <aside className="sidebar">
@@ -56,7 +63,7 @@ export function Sidebar({ activeView, onNavigate }) {
             <div className="user-role">{user?.role}</div>
           </div>
         </div>
-        <button className="logout-btn" onClick={logout} id="logout-btn">
+        <button className="logout-btn" onClick={handleSignOut} id="logout-btn">
           ↩ Sign out
         </button>
       </div>
