@@ -14,14 +14,14 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Code checkout झालं ✅'
+                echo 'Code checkout '
             }
         }
 
         stage('Backend: Install deps') {
             steps {
                 dir('backend') {
-                    sh 'npm install'
+                    bat 'npm install'
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
         stage('Backend: Prisma generate') {
             steps {
                 dir('backend') {
-                    sh 'npx prisma generate'
+                    bat 'npx prisma generate'
                 }
             }
         }
@@ -37,9 +37,8 @@ pipeline {
         stage('Backend: DB migrate + seed') {
             steps {
                 dir('backend') {
-                    // deploy = production-safe migration (dev sarkhi interactive nasते)
-                    sh 'npx prisma migrate deploy'
-                    sh 'node src/utils/seed.js'
+                    bat 'npx prisma migrate deploy'
+                    bat 'node src/utils/seed.js'
                 }
             }
         }
@@ -47,7 +46,7 @@ pipeline {
         stage('Frontend: Install deps') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
+                    bat 'npm install'
                 }
             }
         }
@@ -55,7 +54,7 @@ pipeline {
         stage('Frontend: Lint') {
             steps {
                 dir('frontend') {
-                    sh 'npm run lint || echo "Lint warnings aahet, pan build thambवत nahi"'
+                    bat 'npm run lint || echo Lint warnings aahet pan build thambwat nahi'
                 }
             }
         }
@@ -63,7 +62,7 @@ pipeline {
         stage('Frontend: Build') {
             steps {
                 dir('frontend') {
-                    sh 'npm run build'
+                    bat 'npm run build'
                 }
             }
         }
@@ -71,13 +70,13 @@ pipeline {
 
     post {
         success {
-            echo '✅ Pipeline पूर्ण यशस्वी — backend + frontend दोन्ही ठीक आहेत!'
+            echo ' Pipeline — backend + frontend working!'
         }
         failure {
-            echo '❌ Pipeline फेल झाला — Console Output मध्ये exact stage बघ.'
+            echo '❌ Pipeline fails'
         }
         always {
-            echo 'Build संपला.'
+            echo 'Build end.'
         }
     }
 }
