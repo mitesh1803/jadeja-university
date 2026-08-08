@@ -2,11 +2,10 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'node20'   // Jenkins -> Manage Jenkins -> Tools madhe he exact naav dile pahije (Node 20+, Vite 8 sathi lagte)
+        nodejs 'node20'
     }
 
     environment {
-        // Prisma la SQLite DB path lagto. Repo madhe db/jadeja.db vapratay (README nusar)
         DATABASE_URL = "file:../db/jadeja.db"
     }
 
@@ -14,7 +13,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Code checkout '
+                echo 'Code checkout'
             }
         }
 
@@ -43,6 +42,15 @@ pipeline {
             }
         }
 
+        stage('Backend: Build') {
+            steps {
+                dir('backend') {
+                    // esbuild  src/index.js -> dist/index.js bundle check (Dockerfile uses this command )
+                    bat 'npm run build'
+                }
+            }
+        }
+
         stage('Frontend: Install deps') {
             steps {
                 dir('frontend') {
@@ -54,7 +62,7 @@ pipeline {
         stage('Frontend: Lint') {
             steps {
                 dir('frontend') {
-                    bat 'npm run lint || echo Lint warnings aahet pan build thambwat nahi'
+                    bat 'npm run lint || echo Lint warnings but not stopping the build'
                 }
             }
         }
@@ -66,17 +74,25 @@ pipeline {
                 }
             }
         }
+
+        // ===== DOCKER STAGE (docker-compose use ) =====
+        stage('Docker: Build all images') {
+            steps {
+              //The .env file is generated at runtime using credentials from the Jenkins Credentials Store (see the instructions below for setup)
+                bat 'docker-compose build'
+            }
+        }
     }
 
     post {
         success {
-            echo ' Pipeline — backend + frontend working!'
+            echo 'Pipeline completed— code + docker images working!!'
         }
         failure {
-            echo '❌ Pipeline fails'
+            echo 'Pipeline failed .'
         }
         always {
-            echo 'Build end.'
+            echo 'Build completed.'
         }
     }
 }
