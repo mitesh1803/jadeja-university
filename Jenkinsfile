@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DATABASE_URL =  DATABASE_URL = "postgresql://meetesh:1234@localhost:5432/jadeja-project"
+     DATABASE_URL = "postgresql://meetesh:1234@localhost:5432/jadeja-project"
     }
 
     stages {
