@@ -1,0 +1,20 @@
+# Copy this to terraform.tfvars and fill in real values.
+# terraform.tfvars is gitignored - never commit real secrets.
+
+region       = "ap-south-1"
+project_name = "jadeja"
+
+# Find this in RDS console -> your DB instance -> Connectivity & security -> VPC security groups
+rds_security_group_id = "sg-xxxxxxxxxxxxxxxxx"
+
+# Full connection string using your existing RDS endpoint
+database_url = "postgresql://<user>:<password>@<your-rds-endpoint>:5432/<dbname>"
+
+jwt_secret = "replace-with-a-long-random-string"
+
+# Bump these after each image push, or wire into CI/CD later
+frontend_image_tag = "latest"
+backend_image_tag  = "latest"
+
+# Leave blank for HTTP-only to start. Add an ACM cert ARN later for HTTPS.
+certificate_arn = ""
