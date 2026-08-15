@@ -12,12 +12,8 @@
     "db:seed": "node src/utils/seed.js",
     "db:studio": "npx prisma studio",
     "setup": "npm install && npx prisma generate && npx prisma migrate deploy && node src/utils/seed.js",
-     feature/security-devsecops
-    "build": "esbuild src/index.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist/index.js --external:@prisma/client",
+    "build": "esbuild src/index.js --bundle --platform=node --target=node24 --format=cjs --outfile=dist/index.js --external:@prisma/client",
     "lint": "oxlint"
-
-    "build": "esbuild src/index.js --bundle --platform=node --target=node24 --format=cjs --outfile=dist/index.js --external:@prisma/client"
- main
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -29,11 +25,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.28.1",
-feature/security-devsecops
-    "oxlint": "^1.78.0",
-    "prisma": "^5.14.0"
-
+    "oxlint": "^1.75.0",
     "prisma": "^5.22.0"
- main
   }
 }
