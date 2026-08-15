@@ -1,0 +1,17 @@
+name: leaks
+on: 
+    workflow_call:
+
+jobs: 
+    leaks: 
+        runs-on: ubuntu-latest
+        steps: 
+            - name: checkout code
+              uses: actions/checkout@v7
+              with:
+                fetch-depth: 0
+
+            - name: run git leaks
+              uses: gitleaks/gitleaks-action@v3
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
