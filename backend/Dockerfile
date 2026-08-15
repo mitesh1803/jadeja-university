@@ -1,5 +1,4 @@
-# Stage 1: Install all dependencies
-
+# Stage 1: Install dependencies
 FROM node:24-alpine AS deps
 
 WORKDIR /app
@@ -7,23 +6,18 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
- # Stage 2: Generate Prisma client + bundle app code
-
+# Stage 2: Generate Prisma client and build application
 FROM deps AS build
 
 WORKDIR /app
 
-COPY --from=deps /app/node_modules ./node_modules
-COPY package*.json ./
-COPY tsconfig.json ./
 COPY src ./src
 COPY prisma ./prisma
+COPY package*.json ./
 
-RUN npx prisma generate
-RUN npm run build
+RUN npx prisma generate && npm run build
 
-# # Stage 3: Production image
-
+# Stage 3: Production image
 FROM node:24-alpine AS production
 
 WORKDIR /app
