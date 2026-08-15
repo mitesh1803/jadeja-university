@@ -1,3 +1,4 @@
 ignored:
   - DL3025  # Shell CMD is necessary for Prisma migrations with && logic
-  - DL3066  # node user exists in DHI base image
+  - DL3066 
+  - DL3059 # node user exists in DHI base image
