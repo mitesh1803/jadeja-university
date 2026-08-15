@@ -15,7 +15,7 @@
     "build": "esbuild src/index.js --bundle --platform=node --target=node24 --format=cjs --outfile=dist/index.js --external:@prisma/client"
   },
   "dependencies": {
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -24,6 +24,6 @@
   },
   "devDependencies": {
     "esbuild": "^0.28.1",
-    "prisma": "^5.14.0"
+    "prisma": "^5.22.0"
   }
 }
