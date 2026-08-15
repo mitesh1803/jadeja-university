@@ -34,9 +34,6 @@ jobs:
         secrets: inherit
         needs: docker-scan
 
-    deploy:
-        uses: ./.github/workflows/cd.yml
-        secrets: inherit
-        needs: [docker-build-push]  
+    
     
     
