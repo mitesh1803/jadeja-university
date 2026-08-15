@@ -1,0 +1,39 @@
+#main pipeline
+name: end to end pipline with security
+
+on: 
+    push: 
+        
+jobs: 
+    code-quality: 
+        uses: ./.github/workflows/lint.yml       
+          
+
+    dependency-scan:
+        uses: ./.github/workflows/dependency-scan.yml
+
+    git-leaks:
+        uses: ./.github/workflows/gitleaks-scan.yml  
+        needs: [code-quality, dependency-scan]
+
+     
+
+    sonar-scan:
+        uses: ./.github/workflows/sonarqube-scan.yml
+        secrets: inherit  
+        needs: [code-quality, git-leaks, dependency-scan]
+
+    docker-scan:
+        uses: ./.github/workflows/docker-scans.yml 
+        secrets: inherit  
+        needs: sonar-scan
+        
+        
+    docker-build-push:
+        uses: ./.github/workflows/image-push.yml
+        secrets: inherit
+        needs: docker-scan
+
+    
+    
+    
