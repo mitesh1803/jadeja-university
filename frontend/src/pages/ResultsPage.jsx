@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { apiFetch } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Spinner, EmptyState, Modal, FormField } from '../components/UI';
+import { Spinner, Modal, FormField } from '../components/UI';
 
 const GRADE_OPTIONS = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D', 'F'];
 

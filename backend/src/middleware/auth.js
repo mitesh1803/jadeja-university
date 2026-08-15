@@ -12,7 +12,7 @@ function authenticate(req, res, next) {
     const payload = jwt.verify(token, JWT_SECRET);
     req.user = payload; // { id, name, email, role }
     next();
-  } catch (err) {
+  } catch  {
     return res.status(401).json({ error: 'Invalid or expired token.' });
   }
 }

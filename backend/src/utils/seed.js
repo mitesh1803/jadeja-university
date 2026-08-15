@@ -81,7 +81,7 @@ async function seed() {
 
   console.log('📋 Enrollments created');
 
-  const [a1, a2, a3] = await Promise.all([
+  const [a1, a2, _a3] = await Promise.all([
     prisma.assignment.create({
       data: {
         courseId: btech101.id,

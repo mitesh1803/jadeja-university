@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Spinner, EmptyState, Modal, FormField } from '../components/UI';
 
-const GRADE_OPTIONS = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D', 'F'];
 
 export default function AssignmentsPage({ courses }) {
   const { user } = useAuth();
@@ -148,7 +147,7 @@ export default function AssignmentsPage({ courses }) {
   );
 }
 
-function StudentAssignmentCard({ assignment: a, courseId, onRefresh }) {
+  function StudentAssignmentCard({ assignment: a, onRefresh }) {
   const showToast = useToast();
   const [content, setContent] = useState(a.mySubmission?.content ?? '');
   const [submitting, setSubmitting] = useState(false);
