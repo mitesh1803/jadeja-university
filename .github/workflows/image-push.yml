@@ -1,5 +1,5 @@
 # pushing image to ecr
-name: docker build and push after sast
+name: push image to ecr after all scans
 
 on:
   workflow_call:
