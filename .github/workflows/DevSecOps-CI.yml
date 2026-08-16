@@ -1,4 +1,4 @@
-#main pipeline
+#main pipeline with all worflow called
 name: end to end pipline with security
 
 on: 
