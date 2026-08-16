@@ -1,4 +1,4 @@
-name: Docker Scan
+name: image scanning
 
 on:
    workflow_call: 
