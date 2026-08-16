@@ -1,3 +1,4 @@
+#pushing image to ecr
 name: docker build and push after sast
 
 on:
