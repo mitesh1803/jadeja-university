@@ -3,7 +3,9 @@ name: end to end pipline with security
 
 on: 
     push: 
-        
+permissions:
+  id-token: write
+  contents: read        
 jobs: 
     code-quality: 
         uses: ./.github/workflows/lint.yml       
