@@ -1,26 +1,51 @@
-# tjis is for build and push after sast
 name: docker build and push after sast
-on: 
-    workflow_call:
-jobs: 
-    docker-build-push: 
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                image: [ "frontend", "backend" ]
-        steps: 
-            - name: code checkout
-              uses: actions/checkout@v7
-              
-            - name: docker login
-              uses: docker/login-action@v4
-              with:
-                username: ${{ vars.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_PASSWORD }}
-                
-            - name: build and push docker image ${{ matrix.image}}
-              uses: docker/build-push-action@v4
-              with: 
-                context: ./${{ matrix.image}}
-                push: true
-                tags: ${{ vars.DOCKER_USERNAME}}/university-${{ matrix.image}}:latest        
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  docker-build-push:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        image: [frontend, backend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: github-actions-ecr
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Frontend
+        if: matrix.image == 'frontend'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.FRONTEND_ECR_REPO }}:latest
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.FRONTEND_ECR_REPO }}:${{ github.sha }}
+
+      - name: Build and Push Backend
+        if: matrix.image == 'backend'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.BACKEND_ECR_REPO }}:latest
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.BACKEND_ECR_REPO }}:${{ github.sha }}
