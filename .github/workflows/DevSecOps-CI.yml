@@ -25,16 +25,16 @@ jobs:
         secrets: inherit  
         needs: [code-quality, git-leaks, dependency-scan]
 
-    docker-scan:
+    image-scan:
         uses: ./.github/workflows/docker-scans.yml 
         secrets: inherit  
         needs: sonar-scan
         
         
-    docker-build-push:
+    pushing-image-to-ecr:
         uses: ./.github/workflows/image-push.yml
         secrets: inherit
-        needs: docker-scan
+        needs: image-scan
 
     
     
